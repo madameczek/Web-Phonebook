@@ -33,7 +33,11 @@ namespace Phonebook
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Person}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "page",
+                    pattern: "{controller=Person}/{action=Index}/{page?}");
             });
         }
     }
