@@ -1,61 +1,89 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Phonebook.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Phonebook.Controllers
 {
     public class PersonController : Controller
     {
+        [NonAction]
+        public void SaveData()
+        {
+            using SourceManager sourceManager = new SourceManager();
+            List<PersonModel> people = sourceManager.Get(1, 1000, "%"); // Pobierz rekordy dla żądanej strony
+            foreach (var person in people)
+            {
+                string firstName = person.FirstName;
+                string lastName = person.LastName;
+                string phone = person.Phone;
+                string mail = person.Email;
+                
+                string line = $"insert into People(FirstName, LastName, Phone, Email, Created, Updated) values" +
+                $"('{firstName}', '{lastName}', '{phone}', '{mail}', '{person.Created.ToString("o")}', '{(person.Updated == null? "":((DateTimeOffset)person.Updated).ToString("o"))}');";
+                System.IO.File.AppendAllText(@"d:/data.txt", line+"\r\n");
+            }
+        }
+
         [HttpGet]
         public IActionResult Index(int page = 1)
         {
+            int rowsPerPage = 15;
             List<PersonModel> people = new List<PersonModel>();
             try
             {
+                List<PageButtonModel> pageButtons = new List<PageButtonModel>(); // Lista z przyciskami paginacji
                 using SourceManager sourceManager = new SourceManager();
-                people = sourceManager.Get(1, 20, "%");
-                // Żeby nie wyświetlać zbyt wielu kolumn, wyświetlana jest tylko data ostatniego zapisu rekordu
-                // Jeśli brak daty aktualizacji => data aktualizacji = data utworzenia (tylko na potrzeby tego widoku)
-                people.ForEach(p => { if (p.Updated == null) { p.Updated = p.Created; } });
+                int peopleCount = sourceManager.GetPeopleCount(); // Policz wszystkie rekordy
+                int startRow = page == 1 ? 1 : (page - 1) * rowsPerPage + 1;
+                people = sourceManager.Get(startRow, rowsPerPage, "%"); // Pobierz rekordy dla żądanej strony
+                
+                int pageCount = (int)Math.Ceiling(peopleCount / (double)rowsPerPage);
+                for (int i = 1; i <= pageCount; ++i)
+                {
+                    pageButtons.Add(new PageButtonModel { PageNumber = i });
+                }
+                ViewBag.Pagination = pageButtons;
             }
             catch
             {
-                // wyświetl stronę błędu
                 TempData["Error"] = "Błąd bazy danych";
-                return View("DataSourceErrorPage");
+                return View("DataSourceErrorPage"); // wyświetl stronę błędu
             }
-            // max 3 strony min 20 rekordów
+            // Żeby nie wyświetlać zbyt wielu kolumn, wyświetlana jest tylko data ostatniego zapisu rekordu
+            // Jeśli brak daty aktualizacji => data aktualizacji = data utworzenia (tylko na potrzeby tego widoku)
+            people.ForEach(p => { if (p.Updated == null) { p.Updated = p.Created; } });
+            //SaveData();
             return View(people);
         }
 
         [HttpPost]
         public IActionResult Index(string lastName)
         {
+            // W przypadku podania pustego stringu do wyszukiwania wróć do trybu wyświetlania 
+            // wszystkich rekordów z paginacją
+            if (string.IsNullOrEmpty(lastName)) { return RedirectToActionPermanent("Index", new { page = 1 }); }
+
             List<PersonModel> people = new List<PersonModel>();
             try
             {
                 using SourceManager sourceManager = new SourceManager();
                 lastName = string.IsNullOrWhiteSpace(lastName) ? "%" : lastName.Replace('*', '%');
-                people = sourceManager.Get(1, 10, lastName);
+                people = sourceManager.Get(1, int.MaxValue, lastName);
             }
             catch
             {
-                // wyświetl stronę błędu
                 TempData["Error"] = "Błąd bazy danych";
-                return View("DataSourceErrorPage");
+                return View("DataSourceErrorPage"); // wyświetl stronę błędu
             }
+            // Żeby nie wyświetlać zbyt wielu kolumn, wyświetlana jest tylko data ostatniego zapisu rekordu
+            // Jeśli brak daty aktualizacji => data aktualizacji = data utworzenia (tylko na potrzeby tego widoku)
             people.ForEach(p => { if (p.Updated == null) { p.Updated = p.Created; } });
             return View(people);
         }
 
         [HttpGet]
-        public IActionResult Add()
-        {
-            return View();
-        }
+        public IActionResult Add() { return View(); }
 
         [HttpPost]
         public IActionResult Add(PersonModel person)
@@ -70,10 +98,9 @@ namespace Phonebook.Controllers
                 }
                 catch (Exception)
                 {
-                    // wyświetl stronę błędu
                     TempData["Error"] = "Błąd bazy danych";
                     TempData["Status"] = "Operacja zakończona niepowodzeniem.";
-                    return View("DataSourceErrorPage");
+                    return View("DataSourceErrorPage"); // wyświetl stronę błędu
                 }
                 TempData["Status"] = $"Dodano wpis o Id: {id}";
                 ModelState.Clear();
@@ -93,9 +120,8 @@ namespace Phonebook.Controllers
             }
             catch (Exception)
             {
-                // wyświetl stronę błędu
                 TempData["Error"] = "Błąd bazy danych.";
-                return View("DataSourceErrorPage");
+                return View("DataSourceErrorPage"); // wyświetl stronę błędu
             }
             return View(person);
         }
@@ -112,12 +138,10 @@ namespace Phonebook.Controllers
                 }
                 catch (Exception)
                 {
-                    // wyświetl stronę błędu
                     TempData["Error"] = "Błąd bazy danych";
                     TempData["Status"] = "Operacja zakończona niepowodzeniem.";
-                    return View("DataSourceErrorPage");
+                    return View("DataSourceErrorPage"); // wyświetl stronę błędu
                 }
-
                 TempData["Status"] = $"Zaktualizowano wpis.";
                 ModelState.Clear();
                 return RedirectToActionPermanent("Index");
@@ -125,10 +149,9 @@ namespace Phonebook.Controllers
             return View(person);
         }
 
-
+        [HttpGet]
         public IActionResult Details(int id)
         {
-            // pobierz z bazy
             PersonModel person = new PersonModel();
             try
             {
@@ -137,9 +160,8 @@ namespace Phonebook.Controllers
             }
             catch (Exception)
             {
-                // wyświetl stronę błędu
                 TempData["Error"] = "Błąd bazy danych.";
-                return View("DataSourceErrorPage");
+                return View("DataSourceErrorPage"); // wyświetl stronę błędu
             }
             return View(person);
         }
@@ -156,9 +178,8 @@ namespace Phonebook.Controllers
             }
             catch (Exception)
             {
-                // wyświetl stronę błędu
                 TempData["Error"] = "Błąd bazy danych.";
-                return View("DataSourceErrorPage");
+                return View("DataSourceErrorPage"); // wyświetl stronę błędu
             }
             return View(person);
         }
@@ -174,10 +195,9 @@ namespace Phonebook.Controllers
             }
             catch (Exception)
             {
-                // wyświetl stronę błędu
                 TempData["Error"] = "Błąd bazy danych";
                 TempData["Status"] = "Operacja zakończona niepowodzeniem.";
-                return View("DataSourceErrorPage");
+                return View("DataSourceErrorPage"); // wyświetl stronę błędu
             }
             TempData["Status"] = $"Usunięto wpis.";
             return RedirectToActionPermanent("Index");

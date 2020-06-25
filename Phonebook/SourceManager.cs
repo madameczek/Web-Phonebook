@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Phonebook
 {
@@ -23,6 +22,13 @@ namespace Phonebook
             connection.Open();
         }
 
+        /// <summary>
+        /// Returns List<PersonModel> from database to be displayed on one page
+        /// </summary>
+        /// <param name="start">starting row (!=0)</param>
+        /// <param name="take">numer of rows to be returned</param>
+        /// <param name="search"></param>
+        /// <returns>List<PersonModel></returns>
         public List<PersonModel> Get(int start, int take, string search)
         {
             SqlCommand command = new SqlCommand
@@ -95,6 +101,16 @@ namespace Phonebook
             command.Parameters.AddWithValue("@Id", id).SqlDbType = SqlDbType.Int;
             _ = command.ExecuteNonQuery();
             return;
+        }
+
+        public int GetPeopleCount()
+        {
+            SqlCommand command = new SqlCommand()
+            {
+                CommandText = "select count(*) from People",
+                Connection = connection
+            };
+            return (int)command.ExecuteScalar();
         }
 
         private List<PersonModel> CreatePeopleList(SqlDataReader reader)

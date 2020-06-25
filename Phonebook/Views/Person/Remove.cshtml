@@ -1,14 +1,13 @@
 ﻿@model Phonebook.Models.PersonModel
 
 @{
-    ViewData["Title"] = "Remove";
+    ViewData["Title"] = "Usuń";
 }
 
-<h1>Remove</h1>
+<h1>Usuwanie</h1>
+<hr />
 
 <div>
-    <h4>PersonModel</h4>
-    <hr />
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Id)
@@ -57,6 +56,6 @@
     <form asp-action="RemoveConfirmed" method="post">
         <input type="submit" value="Usuń" class="btn btn-danger" />
         <input name ="id" type="hidden" value=@Model.Id /> | 
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Powrót do listy</a>
     </form>
 </div>
