@@ -1,0 +1,18 @@
+﻿@using System.Threading
+@using Phonebook.Models
+
+@{
+    List<PageButtonModel> pageButtons = (List<PageButtonModel>)ViewBag.Pagination; 
+}
+
+<div class="form-inline">
+    @if (pageButtons != null)
+    {
+        foreach (PageButtonModel item in pageButtons)
+        {
+    <div class="mr-1">
+        @Html.ActionLink(item.PageNumber.ToString(), "Index", new { page = item.PageNumber }, new { @class = "btn btn-secondary" })
+    </div>
+        }
+    }
+</div>

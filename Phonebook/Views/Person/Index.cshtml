@@ -1,23 +1,25 @@
-﻿@model IEnumerable<Phonebook.Models.PersonModel>
+﻿@using System.Threading
+@model IEnumerable<Phonebook.Models.PersonModel>
 
 @{
-    ViewData["Title"] = "Phonebook";
+    ViewData["Title"] = "Książka telefoniczna";
 }
 
 <h1>Książka telefoniczna</h1>
+<hr />
 
 <form asp-action="Index" method="post">
 
-    <div class="form-group">
-        <label for="lastName" class="control-label">Szukaj nazwiska</label>
-        <input name="lastName" type="text" class="form-control" />
-        <button type="submit" value="lastName" class="btn btn-success">Szukaj</button>
+    <div class="form-inline">
+        <label for="lastName" class="control-label, mr-1">Szukaj nazwiska</label>
+        <input name="lastName" type="text" class="form-control, mr-1" />
+        <button type="submit" value="lastName" class="btn btn-primary btn-sm">Szukaj</button>
     </div>
 </form>
 
-<p>
-    <a asp-action="Add">Create New</a>
-</p>
+<div class="mt-1 mb-1">
+    <a asp-action="Add">Dodaj wpis</a>
+</div>
 
 <table class="table">
     <thead>
@@ -60,13 +62,15 @@
                     @Html.DisplayFor(modelItem => item.Updated, "ShortDate")
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                    @Html.ActionLink("Delete", "Remove", new { id = item.Id })
+                    @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Szczegóły", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Usuń", "Remove", new { id = item.Id })
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<div>
+    @Html.Partial("_PaginationBar")
+</div>
 <h4>@TempData["Status"]</h4>
-
