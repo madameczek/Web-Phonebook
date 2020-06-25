@@ -1,12 +1,12 @@
 # Książka telefoniczna
 
-Aplikacja webowa *Książka telefoniczna* pomaga zarządzać podstawowymi danymi kontaktowymi. Zapisuje datę utworzenia oraz modyfikacji wpisu, aby umożliwić określenie, czy dane są aktualne. Dane nie mieszczące się na jednej stronie są dzielone na stony. Wyszukiwanie obsługuje znak * (zastępuje dowolne ciąg znaków). Dane są zapisane w bezpoiecznej bazie SQL.
+Aplikacja *Książka telefoniczna* pomaga zarządzać podstawowymi danymi kontaktowymi. Apka zapisuje datę utworzenia oraz modyfikacji wpisu, aby umożliwić określenie, czy dane są aktualne. Dane nie mieszczące się na jednym ekranie są dzielone na strony. Apka udostępnia wyszukiwanie wpisów. W oknie wyszukiwania można używać wygodnej gwiazdki `*` (zastępuje dowolny ciąg znaków). Dane są zapisane w niezawodnej bazie SQL.
 
 ![Demo](Img/phonebook.gif)
 
 ## Geneza
 
-Aplikacja powstała jako jeden z projektów wykonywanych za zakończenie modułu w szkole programistycznej. Dla mnie to też powtórka i ćwiczenia nowo poznanego MVC.
+Aplikacja powstała jako jeden z projektów wykonywanych za zakończenie modułu w szkole programistycznej. Dla mnie to też powtórka i ćwiczenia z nowo poznanego MVC.
 
 ## Co jest w środku
 
