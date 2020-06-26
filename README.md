@@ -27,9 +27,9 @@ Aplikacja powstała jako jeden z projektów wykonywanych za zakończenie modułu
 
 ## Uruchomienie demo
 
-Aplikacja wymaga serwera SQL. Aby uruchomić aplikację, wykonaj kroki:
+Aplikacja wymaga serwera SQL i środowiska pozwalającego skompilować kod. Źrodła powstały w Visual Studio (.NET Core 3.1). Aby uruchomić aplikację, wykonaj kroki:
 
-- Sklonuj projekt na komputrer lokalny
+- Sklonuj projekt na komputer lokalny
 - Utwórz bazę danych
   - Otwórz dołączony do projektu plik DbSchema.sql w edytorze Management Studio i wykonaj skrypt. Zostanie utworzona baza z przykładowymi danymi. Czasem skrypt przy pierwszym uruchomieniu daje komunikat o rollbacku. Dla pewności można skrypt uruchomić ponownie
   - Alternatywnie załączam także plik `Phonebook.bak` wykonany w wersji SSMS 18.4
