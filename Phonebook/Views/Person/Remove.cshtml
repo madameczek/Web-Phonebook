@@ -55,7 +55,7 @@
     <h3>Czy na pewno chcesz usunąć wpis?</h3>
     <form asp-action="RemoveConfirmed" method="post">
         <input type="submit" value="Usuń" class="btn btn-danger" />
-        <input name ="id" type="hidden" value=@Model.Id /> | 
-        <a asp-action="Index">Powrót do listy</a>
+        <input name ="id" type="hidden" value=@Model.Id />
+        <a asp-action="Index" class="btn btn-primary">Powrót do listy</a>
     </form>
 </div>

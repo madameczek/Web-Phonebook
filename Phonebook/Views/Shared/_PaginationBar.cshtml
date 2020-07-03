@@ -11,7 +11,7 @@
         foreach (PageButtonModel item in pageButtons)
         {
     <div class="mr-1">
-        @Html.ActionLink(item.PageNumber.ToString(), "Index", new { page = item.PageNumber }, new { @class = "btn btn-secondary" })
+        @Html.ActionLink(item.PageNumber.ToString(), "Index", new { page = item.PageNumber }, new { @class = "btn btn-primary" })
     </div>
         }
     }

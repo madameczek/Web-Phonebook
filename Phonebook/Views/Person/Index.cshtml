@@ -11,14 +11,15 @@
 <form asp-action="Index" method="post">
 
     <div class="form-inline">
-        <label for="lastName" class="control-label, mr-1">Szukaj nazwiska</label>
-        <input name="lastName" type="text" class="form-control, mr-1" />
-        <button type="submit" value="lastName" class="btn btn-primary btn-sm">Szukaj</button>
+        <label for="lastName" class="control-label mr-1">Szukaj nazwiska</label>
+        <input name="lastName" type="text" class="form-control mr-1" />
+        <button type="submit" value="lastName" class="btn btn-success btn-sm mr-1">Szukaj</button>
+        <a asp-action="Index" class="btn btn-secondary btn-sm">Wyczyść</a>
     </div>
 </form>
 
 <div class="mt-1 mb-1">
-    <a asp-action="Add">Dodaj wpis</a>
+    <a asp-action="Add" class="btn btn-primary btn-sm">Dodaj wpis</a>
 </div>
 
 <table class="table">
