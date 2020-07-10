@@ -6,7 +6,7 @@ Aplikacja *Książka telefoniczna* pomaga zarządzać podstawowymi danymi kontak
 
 ## Geneza
 
-Aplikacja powstała jako jeden z projektów wykonywanych za zakończenie modułu w szkole programistycznej. Dla mnie to też powtórka i ćwiczenia z nowo poznanego MVC.
+Aplikacja powstała jako jeden z projektów wykonywanych za zakończenie modułu w szkole programistycznej. Dla mnie to też powtórka i ćwiczenia w ASP .NET Core
 
 ## Co jest w środku
 
@@ -19,7 +19,7 @@ Aplikacja powstała jako jeden z projektów wykonywanych za zakończenie modułu
 
 ### Technologia/języki
 
-- ASP .NET Core MVC aplikacja webowa
+- ASP .NET Core aplikacja webowa
 - LinQ
 - MSSQL Express
 - HTML
